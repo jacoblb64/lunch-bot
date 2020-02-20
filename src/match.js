@@ -29,12 +29,13 @@ const parseGroups = (names) => {
     return groups;
 }
 
+const cleanNames = (names) => {return names.map(name => name[0] === '@' ? name.substring(1) : name)};
+
 retrieveUserMap()
 .then((userMap) => {
   getGoogleSheetUsers.then((slackNames)=>{
     initChannels(parseGroups(slackNames), userMap);
   })
-    
 });
 
 
