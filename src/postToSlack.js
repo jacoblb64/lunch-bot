@@ -30,8 +30,6 @@ const postToSlack = (channel, msg) => {
     token: process.env.slackToken,
     channel: channel,
     text: msg
-  }).then(mess => {
-    console.log(msg, 'posted');
   });
 };
 
@@ -39,7 +37,8 @@ const createMessage = (group) => {
   const start = "It’s time to plan your Lunch Match! The group is "; 
   const names = group.join(', ');
   const base = ". \nSome things to consider: \n- Set up a time \n- Decide what to eat \n- Check if anyone has dietary restrictions \n- In the office or out of the office?";
-  return start + names + base;
+  const feedback = "\n\nPlease let us know what you think! http://bit.ly/LunchMatchFeedback"
+  return start + names + base + feedback;
 };
 
 const addUsers = (channel, users) => {
@@ -48,25 +47,25 @@ const addUsers = (channel, users) => {
     token: process.env.slackToken,
     channel: channel,
     users: users
-  }).then(mess => {});
+  });
 }
 
 const initChannels = (groups, userMap) => {
   const slack = new WebClient(process.env.slackToken); 
   groups.forEach(group => {
-    let chanName = `${Math.floor(Math.random() * 10000)}-test-channel`;
+    // let chanName = `lunch-match-${Math.floor(Math.random() * 10000)}`;
     let users = getUserIDsFromNames(userMap, group).join(',');
-    console.log(chanName, ' with ', users);
-    slack.conversations.create({
+    slack.conversations.open({
       token: process.env.slackToken,
-      name: chanName,
-      is_private: true,
-      user_ids: users
+      users: users
     }).then(x => {
       const channel = x.channel.id;
-      console.log(channel);
-      addUsers(channel, users);
-      postToSlack('#'+chanName, createMessage(group));
+      return {channel, users, group};
+    }).then(obj => {
+      addUsers(obj.channel, obj.users);
+      return obj;
+    }).then(obj => {
+      postToSlack(obj.channel, createMessage(obj.group));
     });
   });
 }
