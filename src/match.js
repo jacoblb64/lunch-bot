@@ -1,6 +1,6 @@
 import Promise from 'polyfill-promise';
-// import { getLunch, getSlackNames } from './getSheets';
-// import { getNextLunch, getDateColumn } from './getNextLunchDate';
+import {getGoogleSheetUsers } from './getSheets';
+//import { getNextLunch, getDateCogetGoogleSheetUserslumn } from './getNextLunchDate';
 // import { formatForGeneral, getUsers } from './parseNames';
 import { initChannels, postToSlack, createMessage, retrieveUserMap } from './postToSlack';
 import * as dotenv from "dotenv";
@@ -8,11 +8,14 @@ import * as _ from 'lodash';
 
 dotenv.config();
 
-const slackNames = ['zacknotzach', 'kamran', 'jacob', 'KarenCam Angelo', 'igor'];
+//const slackNames = ['zacknotzach', 'kamran', 'jacob', 'KarenCam Angelo', 'igor'];
 
 const shuffle = (array) => {
     array.sort(() => Math.random() - 0.5);
 }
+// getGoogleSheetUsers.then(value => {
+//   console.log(value);
+// });
 
 const parseGroups = (names) => {
     let groups = [];
@@ -28,7 +31,11 @@ const parseGroups = (names) => {
 
 retrieveUserMap()
 .then((userMap) => {
+  getGoogleSheetUsers.then((slackNames)=>{
     initChannels(parseGroups(slackNames), userMap);
+  })
+    
 });
+
 
 

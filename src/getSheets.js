@@ -3,6 +3,8 @@ import googleAPI from 'google-sheets-api';
 import Promise from 'polyfill-promise';
 const { Client } = require('pg');
 
+var fs = require('fs');
+
 const config = require('../pg-config');
 
 const Sheets = googleAPI.Sheets;
@@ -34,4 +36,32 @@ const getSlackNames = () =>
     });
   });
 
-export { getLunch, getSlackNames };
+
+  const  getGoogleSheetUsers= new Promise(function(resolve, reject) {
+    const readline = require('readline');
+    var emptyArray = [];
+    
+    // create instance of readline
+    // each instance is associated with single input stream
+    let rl = readline.createInterface({
+        input: fs.createReadStream('products.txt')
+    });
+    
+    let line_no = 0;
+    
+    // event is emitted after each line
+    rl.on('line', function(line) {
+        line_no++;
+        emptyArray.push(line);
+        //console.log(line);
+       //console.log(emptyArray);
+    })
+  
+    rl.on('close', function(line) {
+      //console.log(emptyArray);
+      resolve(emptyArray);
+    })
+  });
+
+export { getLunch, getSlackNames , getGoogleSheetUsers};
+
