@@ -3,6 +3,9 @@ import { getLunch, getSlackNames } from './getSheets';
 import { getNextLunch, getDateColumn } from './getNextLunchDate';
 import { formatForGeneral, getUsers } from './parseNames';
 import { postToSlack } from './postToSlack';
+import * as dotenv from "dotenv";
+
+dotenv.config();
 
 let namesObj = {};
 
