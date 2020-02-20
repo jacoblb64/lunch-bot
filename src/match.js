@@ -1,5 +1,5 @@
 import Promise from 'polyfill-promise';
-import { getLunch, getSlackNames } from './getSheets';
+import { getLunch, getSlackNames, getGoogleSheetUsers } from './getSheets';
 import { getNextLunch, getDateColumn } from './getNextLunchDate';
 import { formatForGeneral, getUsers } from './parseNames';
 import { postToSlack } from './postToSlack';
@@ -44,4 +44,5 @@ const getData = () => {
 // }
 const msg = 'Hello world';
 postToSlack('#lunch-bot-test-channel', msg);
+console.log(getGoogleSheetUsers());
 

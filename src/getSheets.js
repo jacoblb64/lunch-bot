@@ -22,21 +22,21 @@ const getLunch = () => {
   });
 };
 
-// const getSlackNames = () =>
-//   new Promise((resolve, reject) => {
-//     const postgres = new Client(config);
-//     postgres.connect();
-//     postgres.query({ text: 'select name,slackid from helpers' }, (err, res) => {
-//       if (!err) {
-//         resolve(res.rows);
-//       } else {
-//         reject(err);
-//       }
-//       postgres.end();
-//     });
-//   });
+const getSlackNames = () =>
+  new Promise((resolve, reject) => {
+    const postgres = new Client(config);
+    postgres.connect();
+    postgres.query({ text: 'select name,slackid from helpers' }, (err, res) => {
+      if (!err) {
+        resolve(res.rows);
+      } else {
+        reject(err);
+      }
+      postgres.end();
+    });
+  });
 
-const getSlackNames = () => {
+const getGoogleSheetUsers = () => {
   sheets.getSheets(id)
   .then(function(sheetsInfo) {
     // NOTE: Using first sheet in this example
@@ -56,4 +56,4 @@ const getSlackNames = () => {
 
 };
 
-export { getLunch, getSlackNames };
+export { getLunch, getSlackNames, getGoogleSheetUsers };
