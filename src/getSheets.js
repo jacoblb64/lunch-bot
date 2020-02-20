@@ -5,6 +5,8 @@ const { Client } = require('pg');
 
 const config = require('../pg-config');
 
+
+
 const Sheets = googleAPI.Sheets;
 const id = process.env.sheetID;
 const serviceEmail = process.env.serviceEmail;
@@ -20,18 +22,38 @@ const getLunch = () => {
   });
 };
 
-const getSlackNames = () =>
-  new Promise((resolve, reject) => {
-    const postgres = new Client(config);
-    postgres.connect();
-    postgres.query({ text: 'select name,slackid from helpers' }, (err, res) => {
-      if (!err) {
-        resolve(res.rows);
-      } else {
-        reject(err);
-      }
-      postgres.end();
-    });
+// const getSlackNames = () =>
+//   new Promise((resolve, reject) => {
+//     const postgres = new Client(config);
+//     postgres.connect();
+//     postgres.query({ text: 'select name,slackid from helpers' }, (err, res) => {
+//       if (!err) {
+//         resolve(res.rows);
+//       } else {
+//         reject(err);
+//       }
+//       postgres.end();
+//     });
+//   });
+
+const getSlackNames = () => {
+  sheets.getSheets(id)
+  .then(function(sheetsInfo) {
+    // NOTE: Using first sheet in this example
+    var sheetInfo = sheetsInfo[0];
+    return Promise.all([
+      sheets.getSheet(id, sheetInfo.id),
+      sheets.getRange(id, sheetInfo.id, 'A1:A10')
+    ]);
+  })
+  .then(function(sheets) {
+    console.log('Sheets metadata:', sheets[0]);
+    console.log('Sheets contents:', sheets[1]);
+  })
+  .catch(function(err){
+    console.error(err, 'Failed to read Sheets document');
   });
+
+};
 
 export { getLunch, getSlackNames };
