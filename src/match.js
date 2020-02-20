@@ -43,5 +43,5 @@ const getData = () => {
 //   getData();
 // }
 const msg = 'Hello world';
-postToSlack('#lunch-bot-test-channel', msg)
+postToSlack('#lunch-bot-test-channel', msg);
 

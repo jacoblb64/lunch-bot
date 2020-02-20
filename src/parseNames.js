@@ -1,22 +1,21 @@
 import _ from 'lodash';
-import Slack from 'slack-client';
 
-const getUsers = () =>
-  new Promise((resolve, reject) => {
-    const slack = new Slack.WebClient(process.env.slackToken);
-    slack.users.list({}, (err, x) => {
-      const y = x.members.filter(user => !user.deleted).map(z => {
-        return {
-          id: z.id,
-          name: z.real_name,
-          firstName: z.profile.first_name,
-          shortName: z.name,
-        };
-      });
+// const getUsers = () =>
+//   new Promise((resolve, reject) => {
+//     const slack = new Slack.WebClient(process.env.slackToken);
+//     slack.users.list({}, (err, x) => {
+//       const y = x.members.filter(user => !user.deleted).map(z => {
+//         return {
+//           id: z.id,
+//           name: z.real_name,
+//           firstName: z.profile.first_name,
+//           shortName: z.name,
+//         };
+//       });
 
-      resolve(y);
-    });
-  });
+//       resolve(y);
+//     });
+//   });
 
 const parseNames = (data, nextDateRow) => {
   const names = data
