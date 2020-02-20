@@ -42,7 +42,14 @@ const createMessage = (group) => {
   return start + names + base;
 };
 
-// const 
+const addUsers = (channel, users) => {
+  const slack = new WebClient(process.env.slackToken);
+  slack.conversations.invite({
+    token: process.env.slackToken,
+    channel: channel,
+    users: users
+  }).then(mess => {});
+}
 
 const initChannels = (groups, userMap) => {
   const slack = new WebClient(process.env.slackToken); 
