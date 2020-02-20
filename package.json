@@ -12,7 +12,8 @@
     "private": "node dist/privateReminder.js",
     "preprivate": "babel src --out-dir dist",
     "pregeneral": "babel src --out-dir dist",
-    "postinstall": "mkdir -p dist && babel src --out-dir dist"
+    "postinstall": "mkdir -p dist && babel src --out-dir dist",
+    "lunchmatch": "node dist/match.js"
   },
   "babel": {
     "presets": [
