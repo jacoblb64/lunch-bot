@@ -1,3 +1,7 @@
 node_modules
 .env
 dist
+*.pem
+credentials.json
+token.json
+products.txt
