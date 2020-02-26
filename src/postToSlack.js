@@ -24,6 +24,32 @@ const getUserIDsFromNames = (users, group) => {
   });
 };
 
+const getUserIDsFromEmails = (users, group) => {
+  if (!users) {
+    console.log('users not retrieved');
+    return;
+  }
+
+  return group.map(u => {
+    let result = users.find(user => user.profile.email === u);
+    return result ? result.id : '';
+  });
+}
+
+const getDisplayNamesFromEmails = (users, group) => {
+  if (!users) {
+    console.log('users not retrieved');
+    return;
+  }
+
+  const names = group.map(u => {
+    let result = users.find(user => user.profile.email === u);
+    return result ? (result.name || result.displayname) : '';
+  });
+  // console.log(names);
+  return names;
+}
+
 const postToSlack = (channel, msg) => {
   const slack = new WebClient(process.env.slackToken);
   slack.chat.postMessage({
@@ -34,6 +60,7 @@ const postToSlack = (channel, msg) => {
 };
 
 const createMessage = (group) => {
+  console.log(group);
   const start = "It’s time to plan your Lunch Match! The group is "; 
   const names = group.join(', ');
   const base = ". \nSome things to consider: \n- Set up a time \n- Decide what to eat \n- Check if anyone has dietary restrictions \n- In the office or out of the office?";
@@ -55,23 +82,24 @@ const initChannels = (groups, userMap) => {
   const slack = new WebClient(process.env.slackToken); 
   groups.forEach(group => {
     // let chanName = `lunch-match-${Math.floor(Math.random() * 10000)}`;
-    let users = getUserIDsFromNames(userMap, group).join(',');
+    let users = getUserIDsFromEmails(userMap, group).join(',');
+    let displayNames = getDisplayNamesFromEmails(userMap, group);
     slack.conversations.open({
       token: process.env.slackToken,
       users: users
     }).then(x => {
       const channel = x.channel.id;
-      return {channel, users, group};
+      return {channel, users, displayNames};
     }).then(obj => {
       addUsers(obj.channel, obj.users);
       return obj;
     }).then(obj => {
-      postToSlack(obj.channel, createMessage(obj.group));
+      postToSlack(obj.channel, createMessage(obj.displayNames));
     });
   });
 }
 
 
-export { getUserIDsFromNames };
+export { getUserIDsFromNames, getUserIDsFromEmails };
 export { retrieveUserMap };
 export { initChannels, postToSlack, createMessage };

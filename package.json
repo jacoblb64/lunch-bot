@@ -9,7 +9,7 @@
     "general": "node dist/generalAnnouncement.js",
     "signup": "node dist/postSignup.js",
     "private": "node dist/privateReminder.js",
-    "lunchmatch": "node dist/match.js"
+    "lunchmatch": "npm run build && node dist/match.js"
   },
   "babel": {
     "presets": [
