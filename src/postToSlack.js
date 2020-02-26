@@ -37,8 +37,9 @@ const createMessage = (group) => {
   const start = "It’s time to plan your Lunch Match! The group is "; 
   const names = group.join(', ');
   const base = ". \nSome things to consider: \n- Set up a time \n- Decide what to eat \n- Check if anyone has dietary restrictions \n- In the office or out of the office?";
-  const feedback = "\n\nPlease let us know what you think! http://bit.ly/LunchMatchFeedback"
-  return start + names + base + feedback;
+  const feedback = "\n\nPlease let us know what you think! http://bit.ly/LunchMatchFeedback";
+  const unsub = "\n\nIf you want to unsubscribe from future weeks, please fill out: http://bit.ly/LunchMatchUnsubscribe";
+  return start + names + base + feedback + unsub;
 };
 
 const addUsers = (channel, users) => {
