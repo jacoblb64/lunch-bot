@@ -21,6 +21,7 @@ const shuffle = (array) => {
 const parseGroups = (names) => {
     let groups = [];
     const maxSize = 4;
+    names.filter((a, b) => name.indexOf(a) === b); // filter duplicates
     shuffle(names);
     for (let i = 0; i < names.length; i += maxSize) {
         let temp = names.slice(i, i + maxSize);
