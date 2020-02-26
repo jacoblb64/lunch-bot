@@ -9,7 +9,7 @@ import * as _ from 'lodash';
 dotenv.config();
 
 // const slackNames = ['zacknotzach', 'kamran', 'jacob', 'KarenCam Angelo', 'igor'];
-const slackEmails = ['zack@havenlife.com', 'jacob@havenlife.com'];
+const slackEmails = ['zack@havenlife.com', 'jacob@havenlife.com', 'kamran@havenlife.com'];
 
 const shuffle = (array) => {
     array.sort(() => Math.random() - 0.5);
@@ -26,6 +26,10 @@ const parseGroups = (names) => {
         let temp = names.slice(i, i + maxSize);
         groups.push(temp);
     }
+    if (names.length % maxSize === 1) {
+      groups[groups.length - 1].push(groups[0][0]);
+      groups[0] = groups[0].slice(1, maxSize);
+    }
     console.log(groups);
     return groups;
 }
@@ -40,6 +44,3 @@ retrieveUserMap()
   initChannels(parseGroups(slackEmails), userMap);
   // });
 });
-
-
-
