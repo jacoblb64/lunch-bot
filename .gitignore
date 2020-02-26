@@ -1,8 +1,11 @@
+.DS_Store
 node_modules
 .env
+env
+*.env
 dist
 *.pem
 credentials.json
 token.json
 products.txt
-.DS_Store
+emailMapping.csv

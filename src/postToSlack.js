@@ -1,7 +1,7 @@
 const { WebClient } = require('@slack/web-api');
 import * as _ from 'lodash';
 
-const retrieveUserMap = () =>
+export const retrieveUserMap = () =>
   new Promise((resolve, reject) => {
     const slack = new WebClient(process.env.slackToken);
     slack.users.list()
@@ -101,5 +101,4 @@ const initChannels = (groups, userMap) => {
 
 
 export { getUserIDsFromNames, getUserIDsFromEmails };
-export { retrieveUserMap };
 export { initChannels, postToSlack, createMessage };
