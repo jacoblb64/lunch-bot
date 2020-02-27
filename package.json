@@ -6,14 +6,15 @@
   "scripts": {
     "build": "babel src --out-dir dist",
     "getUsers": "node dist/getUsersFromSheets.js",
-    "lunchmatch": "node dist/match.js",
+    "lunchmatch": "node dist/lunchmatch.js",
     "buildandrun": "npm run build && npm run",
-    "dryrun": "node dist/match.js --dry-run",
-    "generate-token": "node dist/generateGoogleApiToken.js"
+    "dryrun": "node dist/lunchmatch.js --dry-run",
+    "generate-token": "node dist/generateGoogleApiToken.js",
+    "test": "mocha -r @babel/register test/**/*.test.js"
   },
   "babel": {
     "presets": [
-      "latest-node"
+      "@babel/preset-env"
     ]
   },
   "engines": {
@@ -36,13 +37,18 @@
   "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.8.6",
+    "@babel/preset-env": "^7.8.6",
+    "@babel/register": "^7.8.6",
     "babel-preset-latest-node": "^4.0.1",
+    "chai": "^4.2.0",
     "eslint": "^3.7.1",
     "eslint-config-airbnb": "^12.0.0",
     "eslint-plugin-flowtype": "^2.20.0",
     "eslint-plugin-import": "^2.0.1",
     "eslint-plugin-jsx-a11y": "^2.2.3",
     "eslint-plugin-react": "^6.4.1",
-    "fuse.js": "^3.4.6"
+    "fuse.js": "^3.4.6",
+    "mocha": "^7.1.0",
+    "sinon": "^9.0.0"
   }
 }

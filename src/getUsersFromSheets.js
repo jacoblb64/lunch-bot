@@ -117,7 +117,8 @@ export const retrieveOnlyOptInUsers = () => new Promise((resolve, reject) => {
   });
 });
 
-retrieveOnlyOptInUsers()
-.then((result) => {
-  console.log(result);
-});
+// uncomment to 'run' this file
+// retrieveOnlyOptInUsers()
+// .then((result) => {
+//   console.log(result);
+// });
