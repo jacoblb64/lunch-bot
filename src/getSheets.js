@@ -44,7 +44,7 @@ const getSlackNames = () =>
     // create instance of readline
     // each instance is associated with single input stream
     let rl = readline.createInterface({
-        input: fs.createReadStream('products.txt')
+        input: fs.createReadStream('optInUsers.txt')
     });
     
     let line_no = 0;

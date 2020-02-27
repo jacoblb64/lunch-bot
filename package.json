@@ -6,10 +6,9 @@
   "scripts": {
     "start": "node app.js",
     "build": "babel src --out-dir dist",
-    "general": "node dist/generalAnnouncement.js",
-    "signup": "node dist/postSignup.js",
-    "private": "node dist/privateReminder.js",
-    "lunchmatch": "npm run build && node dist/match.js"
+    "getUsers": "node dist/getUsersFromSheets.js",
+    "lunchmatch": "node dist/match.js",
+    "buildandrun": "npm run build && npm run"
   },
   "babel": {
     "presets": [

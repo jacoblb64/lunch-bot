@@ -8,7 +8,7 @@ dotenv.config();
 
 retrieveUserMap()
 .then((users) => {
-    let slackNames = fs.readFileSync('products.txt').toString().split("\n");
+    let slackNames = fs.readFileSync('optInUsers.txt').toString().split("\n");
 
     let fuseOptions = {
         keys: ['name', 'profile.display_name']

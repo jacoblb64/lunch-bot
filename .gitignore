@@ -8,4 +8,6 @@ dist
 credentials.json
 token.json
 products.txt
+optInUsers.txt
+optOutUsers.txt
 emailMapping.csv
