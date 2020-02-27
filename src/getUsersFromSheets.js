@@ -31,13 +31,7 @@ function authorize(credentials) {
   const oAuth2Client = new google.auth.OAuth2(
       client_id, client_secret, redirect_uris[0]);
 
-  let token;
-  try {
-    token = fs.readFileSync(TOKEN_PATH);
-  }
-  catch {
-
-  }
+  const token = fs.readFileSync(TOKEN_PATH);
   oAuth2Client.setCredentials(JSON.parse(token));
   return(oAuth2Client);
 };
