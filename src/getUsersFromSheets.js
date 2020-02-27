@@ -2,7 +2,6 @@ const fs = require('fs');
 const readline = require('readline');
 const {google} = require('googleapis');
 import * as dotenv from 'dotenv';
-import { retrieveUserMap } from './postToSlack';
 
 dotenv.config();
 
