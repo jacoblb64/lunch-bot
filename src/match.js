@@ -27,7 +27,7 @@ const parseGroups = (optIns, optOuts) => {
 
     shuffle(optIns);
     for (let i = 0; i < optIns.length; i += maxSize) {
-        let temp = names.slice(i, i + maxSize);
+        let temp = optIns.slice(i, i + maxSize);
         groups.push(temp);
     }
     if (optIns.length % maxSize === 1) {
