@@ -27,18 +27,16 @@ const TOKEN_PATH = 'token.json';
  * @param {Object} credentials The authorization client credentials.
  * @param {function} callback The callback to call with the authorized client.
  */
-function authorize(credentials, callback, callback2) {
+function authorize(credentials) {
   const {client_secret, client_id, redirect_uris} = credentials.installed;
   const oAuth2Client = new google.auth.OAuth2(
       client_id, client_secret, redirect_uris[0]);
 
-  // Check if we have previously stored a token.
-  fs.readFile(TOKEN_PATH, (err, token) => {
-    // if (err) return getNewToken(oAuth2Client, callback);
-    oAuth2Client.setCredentials(JSON.parse(token));
-    callback(oAuth2Client, callback2);
-  });
-}
+  const token = fs.readFileSync(TOKEN_PATH);
+  oAuth2Client.setCredentials(JSON.parse(token));
+  return(oAuth2Client);
+};
+
 
 /**
  * Get and store new token after prompting for user authorization, and then
@@ -76,79 +74,75 @@ function authorize(credentials, callback, callback2) {
  * @see https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
  * @param {google.auth.OAuth2} auth The authenticated Google OAuth client.
  */
-function getUsers(auth, callback) {
-  const sheets = google.sheets({version: 'v4', auth});
-
-  const optInPromise = new Promise((resolve, reject) => {
-    console.log('Getting opted in users');
-    sheets.spreadsheets.values.get({
-      spreadsheetId: process.env.sheetID,
-      range: 'Form Responses 1!D2:D500',
-    }, (err, res) => {
-      if (err) return console.log('The API returned an error: ' + err);
-      const rows = res.data.values;
-      let userList = [];
-      if (rows.length) {
-        // console.log('Name:');
-        // emails are in column D
-        fs.writeFileSync('optInUsers.txt', '');
-        rows.map((row) => {
-          // console.log(`${row[0]}`);
-          fs.appendFileSync('optInUsers.txt', row + '\n');
-          userList.push(row[0]);
-        });
-      } else {
-        console.log('No data found.');
-      }
-      resolve(userList);
+export function getUsers(auth) {
+  return new Promise((resolve, reject) => {
+    const sheets = google.sheets({version: 'v4', auth});
+  
+    const optInPromise = new Promise((resolve, reject) => {
+      console.log('Getting opted in users');
+      sheets.spreadsheets.values.get({
+        spreadsheetId: process.env.sheetID,
+        range: 'Form Responses 1!D2:D500',
+      }, (err, res) => {
+        if (err) return console.log('The API returned an error: ' + err);
+        const rows = res.data.values;
+        let userList = [];
+        if (rows.length) {
+          // console.log('Name:');
+          // emails are in column D
+          fs.writeFileSync('optInUsers.txt', '');
+          rows.map((row) => {
+            // console.log(`${row[0]}`);
+            fs.appendFileSync('optInUsers.txt', row + '\n');
+            userList.push(row[0]);
+          });
+        } else {
+          console.log('No data found.');
+        }
+        resolve(userList);
+      });
     });
-  });
 
-  const optOutPromise = new Promise((resolve, reject) => {
-    console.log('Getting opted out users');
-    sheets.spreadsheets.values.get({
-      spreadsheetId: process.env.sheetID,
-      range: 'Form Responses 2!B2:B500',
-    }, (err, res) => {
-      if (err) return console.log('The API returned an error: ' + err);
-      const rows = res.data.values;
-      let userList = [];
-      if (rows.length) {
-        // console.log('Name:');
-        // emails are in column D
-        fs.writeFileSync('optOutUsers.txt', '');
-        rows.map((row) => {
-          // console.log(`${row[0]}`);
-          fs.appendFileSync('optOutUsers.txt', row + '\n');
-          userList.push(row[0]);
-        });
-      } else {
-        console.log('No data found.');
-      }
-      resolve(userList);
+    const optOutPromise = new Promise((resolve, reject) => {
+      console.log('Getting opted out users');
+      sheets.spreadsheets.values.get({
+        spreadsheetId: process.env.sheetID,
+        range: 'Form Responses 2!B2:B500',
+      }, (err, res) => {
+        if (err) return console.log('The API returned an error: ' + err);
+        const rows = res.data.values;
+        let userList = [];
+        if (rows.length) {
+          // console.log('Name:');
+          // emails are in column D
+          fs.writeFileSync('optOutUsers.txt', '');
+          rows.map((row) => {
+            // console.log(`${row[0]}`);
+            fs.appendFileSync('optOutUsers.txt', row + '\n');
+            userList.push(row[0]);
+          });
+        } else {
+          console.log('No data found.');
+        }
+        resolve(userList);
+      });
     });
-  });
 
-  Promise.all([optInPromise, optOutPromise])
-  .then((values) => {
-    // console.log(values);
-    callback(values);
+    resolve(Promise.all([optInPromise, optOutPromise]));
   });
-
 }
 
-export function retrieveUsers(callback) {
-  fs.readFile('credentials.json', (err, content) => {
-    if (err) return console.log('Error loading client secret file:', err);
-    // Authorize a client with credentials, then call the Google Sheets API.
-    authorize(JSON.parse(content), getUsers, callback);
-  });
-}
+export const retrieveUsers = () => new Promise((resolve, reject) => {
+  const credentials = fs.readFileSync('credentials.json');
+  const authClient = authorize(JSON.parse(credentials));
+  resolve(getUsers(authClient));
+});
 
 function test(str) {
   console.log(str);
 }
 
-function noop() {}
-
-retrieveUsers(noop);
+retrieveUsers()
+.then((result) => {
+  console.log(result);
+});
