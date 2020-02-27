@@ -138,11 +138,19 @@ export const retrieveUsers = () => new Promise((resolve, reject) => {
   resolve(getUsers(authClient));
 });
 
-function test(str) {
-  console.log(str);
-}
+export const retrieveOnlyOptInUsers = () => new Promise((resolve, reject) => {
+  retrieveUsers()
+  .then((result) => {
+    let inSet = new Set(result[0]);
+    let outSet = new Set(result[1]);
 
-retrieveUsers()
+    let diff = new Set([...inSet].filter(x => !outSet.has(x)));
+
+    resolve([...diff]);
+  });
+});
+
+retrieveOnlyOptInUsers()
 .then((result) => {
   console.log(result);
 });

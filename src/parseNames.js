@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-// const getUsers = () =>
+// export const getUsers = () =>
 //   new Promise((resolve, reject) => {
 //     const slack = new Slack.WebClient(process.env.slackToken);
 //     slack.users.list({}, (err, x) => {
@@ -108,4 +108,4 @@ const formatForGeneral = (data, nextDateRow, namesObj, slackInfo) => {
   return formattedNames;
 };
 
-export { getUsers, parseNames, formatForPrivate, formatForGeneral };
+export { parseNames, formatForPrivate, formatForGeneral };

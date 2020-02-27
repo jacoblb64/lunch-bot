@@ -12,7 +12,7 @@ export const retrieveUserMap = () =>
     });
   });
 
-const getUserIDsFromNames = (users, group) => {
+export const getUserIDsFromNames = (users, group) => {
   if (!users) {
     console.log('users not retrieved');
     return;
@@ -24,7 +24,7 @@ const getUserIDsFromNames = (users, group) => {
   });
 };
 
-const getUserIDsFromEmails = (users, group) => {
+export const getUserIDsFromEmails = (users, group) => {
   if (!users) {
     console.log('users not retrieved');
     return;
@@ -36,7 +36,7 @@ const getUserIDsFromEmails = (users, group) => {
   });
 }
 
-const getDisplayNamesFromEmails = (users, group) => {
+export const getDisplayNamesFromEmails = (users, group) => {
   if (!users) {
     console.log('users not retrieved');
     return;
@@ -50,13 +50,19 @@ const getDisplayNamesFromEmails = (users, group) => {
   return names;
 }
 
-const postToSlack = (channel, msg) => {
+export const postToSlack = (channel, msg) => {
   const slack = new WebClient(process.env.slackToken);
-  slack.chat.postMessage({
-    token: process.env.slackToken,
-    channel: channel,
-    text: msg
-  });
+
+  if (!process.env.dryrun) {
+    return slack.chat.postMessage({
+      token: process.env.slackToken,
+      channel: channel,
+      text: msg
+    });
+  }
+  else {
+    console.log(`Posting message to slack in ${channel} saying ${msg}`);
+  }
 };
 
 const createMessage = (group) => {
@@ -69,25 +75,47 @@ const createMessage = (group) => {
   return start + names + base + feedback + unsub;
 };
 
-const addUsers = (channel, users) => {
+export const addUsers = (channel, users) => {
   const slack = new WebClient(process.env.slackToken);
-  slack.conversations.invite({
-    token: process.env.slackToken,
-    channel: channel,
-    users: users
-  });
+
+  if (!process.env.dryrun) {
+    return slack.conversations.invite({
+      token: process.env.slackToken,
+      channel: channel,
+      users: users
+    });
+  }
+  else {
+    console.log(`adding ${users} to ${channel}`);
+  }
 }
 
-const initChannels = (groups, userMap) => {
-  const slack = new WebClient(process.env.slackToken); 
-  groups.forEach(group => {
-    // let chanName = `lunch-match-${Math.floor(Math.random() * 10000)}`;
-    let users = getUserIDsFromEmails(userMap, group).join(',');
-    let displayNames = getDisplayNamesFromEmails(userMap, group);
-    slack.conversations.open({
+export const createChannel = (users) => {
+  const slack = new WebClient(process.env.slackToken);
+
+  if (!process.env.dryrun) {
+    return slack.conversations.open({
       token: process.env.slackToken,
       users: users
-    }).then(x => {
+    })
+  }
+  else {
+    console.log(`creating a conversation for ${users}`);
+    return({'channel': {'id': 0}});
+  }
+};
+
+export const initChannels = (groups, userMap) => {
+  groups.forEach(group => {
+    let users = getUserIDsFromEmails(userMap, group).join(',');
+    let displayNames = getDisplayNamesFromEmails(userMap, group);
+
+    let create = new Promise((resolve) => {
+      resolve(createChannel(users));
+    });
+
+    create
+    .then(x => {
       const channel = x.channel.id;
       return {channel, users, displayNames};
     }).then(obj => {
@@ -98,7 +126,3 @@ const initChannels = (groups, userMap) => {
     });
   });
 }
-
-
-export { getUserIDsFromNames, getUserIDsFromEmails };
-export { initChannels, postToSlack, createMessage };

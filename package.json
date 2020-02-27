@@ -4,27 +4,26 @@
   "description": "A bot that alerts people of their lunch duties on Friday morning",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
     "build": "babel src --out-dir dist",
     "getUsers": "node dist/getUsersFromSheets.js",
     "lunchmatch": "node dist/match.js",
-    "buildandrun": "npm run build && npm run"
+    "buildandrun": "npm run build && npm run",
+    "dryrun": "node dist/match.js --dry-run"
   },
   "babel": {
     "presets": [
-      "es2015"
+      "latest-node"
     ]
   },
   "engines": {
-    "node": "6.9.1"
+    "node": "12.14.1"
   },
   "author": "Sparkbox",
   "license": "ISC",
   "dependencies": {
     "@slack/web-api": "^5.7.0",
-    "babel-cli": "^6.5.1",
-    "babel-preset-es2015": "^6.5.0",
     "body-parser": "^1.18.2",
+    "csv-stringify": "^5.3.6",
     "dotenv": "^8.2.0",
     "express": "^4.16.2",
     "google-sheets-api": "^0.4.2",
@@ -34,7 +33,9 @@
     "slack-client": "^2.0.6"
   },
   "devDependencies": {
-    "csv-stringify": "^5.3.6",
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.6",
+    "babel-preset-latest-node": "^4.0.1",
     "eslint": "^3.7.1",
     "eslint-config-airbnb": "^12.0.0",
     "eslint-plugin-flowtype": "^2.20.0",
