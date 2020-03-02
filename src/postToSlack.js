@@ -1,5 +1,9 @@
 const { WebClient } = require('@slack/web-api');
 import * as _ from 'lodash';
+import * as dotenv from "dotenv";
+
+dotenv.config();
+const dryRun = process.argv.includes('--dry-run');;
 
 export const retrieveUserMap = () =>
   new Promise((resolve, reject) => {
@@ -53,7 +57,7 @@ export const getDisplayNamesFromEmails = (users, group) => {
 export const postToSlack = (channel, msg) => {
   const slack = new WebClient(process.env.slackToken);
 
-  if (!process.env.dryrun) {
+  if (!dryRun) {
     return slack.chat.postMessage({
       token: process.env.slackToken,
       channel: channel,
@@ -78,7 +82,7 @@ const createMessage = (group) => {
 export const addUsers = (channel, users) => {
   const slack = new WebClient(process.env.slackToken);
 
-  if (!process.env.dryrun) {
+  if (!dryRun) {
     return slack.conversations.invite({
       token: process.env.slackToken,
       channel: channel,
@@ -93,7 +97,7 @@ export const addUsers = (channel, users) => {
 export const createChannel = (users) => {
   const slack = new WebClient(process.env.slackToken);
 
-  if (!process.env.dryrun) {
+  if (!dryRun) {
     return slack.conversations.open({
       token: process.env.slackToken,
       users: users

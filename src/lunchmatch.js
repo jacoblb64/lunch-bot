@@ -4,7 +4,7 @@ import { retrieveOnlyOptInUsers } from './getUsersFromSheets';
 import * as dotenv from "dotenv";
 
 dotenv.config();
-process.env.dryrun = process.argv.includes('--dry-run');
+const testEmails = ['zack@havenlife.com'];
 
 
 retrieveUserMap()
@@ -13,6 +13,7 @@ retrieveUserMap()
   retrieveOnlyOptInUsers()
   .then((slackEmails) => {
   //   initChannels(parseGroups(slackNames), userMap);
-    initChannels(parseGroups(slackEmails), userMap);
+    // initChannels(parseGroups(slackEmails), userMap);
+    initChannels(parseGroups(testEmails), userMap);
   });
 });
