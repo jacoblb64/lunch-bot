@@ -1,4 +1,4 @@
-import { parseGroups } from './match';
+import { parseGroups, getBestGroup, allPastGroups } from './match';
 import { initChannels, retrieveUserMap } from './postToSlack';
 import { retrieveOnlyOptInUsers } from './getUsersFromSheets';
 import * as dotenv from "dotenv";
@@ -12,7 +12,7 @@ retrieveUserMap()
   // console.log(userMap);
   retrieveOnlyOptInUsers()
   .then((slackEmails) => {
-    // initChannels(getBestGroup(slackEmails), userMap);
-    initChannels(getBestGroup(testEmails, pastGroups, 100), userMap);
+    initChannels(getBestGroup(slackEmails, allPastGroups, 1000), userMap);
+    // initChannels(parseGroups(testEmails), userMap);
   });
 });

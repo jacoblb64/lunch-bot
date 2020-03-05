@@ -76,7 +76,10 @@ const createMessage = (group) => {
   const base = ". \nSome things to consider: \n- Set up a time \n- Decide what to eat \n- Check if anyone has dietary restrictions \n- In the office or out of the office?";
   const feedback = "\n\nPlease let us know what you think! http://bit.ly/LunchMatchFeedback";
   const unsub = "\n\nIf you want to unsubscribe from future weeks, please fill out: http://bit.ly/LunchMatchUnsubscribe";
-  return start + names + base + feedback + unsub;
+  const newBase = ". \n PLEASE REACT WITH :thumbsup: or :thumbsdown:\n Which day can you get together for lunch?\n\n";
+  const otherNewBase = ".\nVOTE HERE BY REACTING TO WHICH DAYS WORK BEST FOR YOU! (:one: for Monday, :two: for Tuesday, etc.). Then arrange to make it happen.";
+  // return start + names + base + feedback + unsub;
+  return start + names + otherNewBase;
 };
 
 export const addUsers = (channel, users) => {
@@ -127,6 +130,24 @@ export const initChannels = (groups, userMap) => {
       return obj;
     }).then(obj => {
       postToSlack(obj.channel, createMessage(obj.displayNames));
+      return obj;
+    // }).then(obj => {
+    //   postToSlack(obj.channel, 'Monday\n');
+    //   return obj;
+    // }).then(obj => {
+    //   postToSlack(obj.channel, 'Tuesday\n');
+    //   return obj;
+    // }).then(obj => {
+    //   postToSlack(obj.channel, 'Wednesday\n');
+    //   return obj;
+    // }).then(obj => {
+    //   postToSlack(obj.channel, 'Thursday\n');
+    //   return obj;
+    // }).then(obj => {
+    //   postToSlack(obj.channel, 'Friday\n');
+    //   return obj;
+    // }).then(obj => {
+    //   postToSlack(obj.channel, "Sorry, I can't make it :(");
     });
   });
 }
