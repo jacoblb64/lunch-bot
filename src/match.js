@@ -1,4 +1,4 @@
-import Promise from 'polyfill-promise';
+// import Promise from 'polyfill-promise';
 import {getGoogleSheetUsers } from './getSheets';
 import { getNextLunch, getDateCogetGoogleSheetUserslumn } from './getNextLunchDate';
 import { formatForGeneral, getUsers } from './parseNames';
@@ -20,7 +20,7 @@ export const parseGroups = (names) => {
         let temp = names.slice(i, i + maxSize);
         groups.push(temp);
     }
-    if (names.length % maxSize === 1) {
+    if (names.length % maxSize === 1 || names.length % maxSize === 2) {
       groups[groups.length - 1].push(groups[0][0]);
       groups[0] = groups[0].slice(1, maxSize);
     }
@@ -50,7 +50,7 @@ export const assessGroup = (groups, allPastGroups) => {
 }
 
 export const getBestGroup = (names, allPastGroups, iterations) => {
-  //console.log('All past groups:, allPastGroups);
+  // console.log('All past groups:', allPastGroups);
   let bestScore = Infinity;
   let bestGroups, tempGroups, tempScore;
   for (let i = 0; i < iterations; i++) {
@@ -69,93 +69,94 @@ export const getBestGroup = (names, allPastGroups, iterations) => {
 }
 
 
-// const namesTest = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-// const allPastGroupsTest = [
-// [ [ 3, 2, 7 ], [ 9, 5, 10 ], [ 11, 1, 8 ], [ 6, 4 ] ],
-// [ [ 10, 2, 11 ], [ 6, 1, 9 ], [ 8, 3, 5 ], [ 7, 4 ] ],
-// [ [ 2, 8, 6 ], [ 1, 10, 3 ], [ 7, 11, 5 ], [ 9, 4 ] ], 
-// [ [ 8, 4, 10 ], [ 3, 11, 9 ], [ 6, 5, 2 ], [ 7, 1 ] ],
-// [ [ 4, 3, 11 ], [ 8, 6, 10 ], [ 2, 9, 5 ], [ 1, 7 ] ]]
-// const names = [];
-export const allPastGroups = [[
-  [
-    'karencam@havenlife.com',
-    'alex@havenlife.com',
-    'ari@havenlife.com',
-    'franklin@havenlife.com'
-  ],
-  [
-    'yisheng.tang@havenlife.com',
-    'lester@havenlife.com',
-    'kamran@havenlife.com',
-    'wei@havenlife.com'
-  ],
-  [
-    'karenhan@havenlife.com',
-    'richard@havenlife.com',
-    'eli@havenlife.com',
-    'gabesch@havenlife.com'
-  ],
-  [
-    'tova@havenlife.com',
-    'zack@havenlife.com',
-    'igor@havenlife.com',
-    'nsedlacek@havenlife.com'
-  ],
-  [
-    'morellana@havenlife.com',
-    'brittanylee@havenlife.com',
-    'michael@havenlife.com',
-    'nicolepark@havenlife.com'
-  ],
-  [
-    'mark@havenlife.com',
-    'brian@havenlife.com',
-    'hannah.farnham@havenlife.com',
-    'brianleu@havenlife.com'
-  ],
-  [
-    'aneesha@havenlife.com',
-    'ewellk@havenlife.com',
-    'tisha@havenlife.com',
-    'kathryn@havenlife.com'
-  ],
-  [
-    'sushal@havenlife.com',
-    'jacob@havenlife.com',
-    'kateguzik@havenlife.com',
-    'gabe@havenlife.com'
-  ],
-  [
-    'shanks@havenlife.com',
-    'nickeaket@havenlife.com',
-    'adamhamot@havenlife.com',
-    'laura@havenlife.com'
-  ],
-  [
-    'james@havenlife.com',
-    'ashley@havenlife.com',
-    'roberto@havenlife.com',
-    'ppennelli@havenlife.com'
-  ],
-  [
-    'matteo@havenlife.com',
-    'hannahmctigue@havenlife.com',
-    'sambrandt@havenlife.com',
-    'anja@havenlife.com'
-  ],
-  [
-    'reeve@havenlife.com',
-    'khuyen@havenlife.com',
-    'sara@havenlife.com',
-    'elle@havenlife.com'
-  ],
-  [
-    'steve@havenlife.com',
-    'sararadin@havenlife.com',
-    'nathan@havenlife.com',
-    'rashmi@havenlife.com'
-  ]]];
-
-// getBestGroup(namesTest, allPastGroupsTest, 10000);
+const namesTest = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+const allPastGroupsTest = [
+  [ [ 11, 4 ], [ 8, 1, 5 ], [ 3, 2, 10 ], [ 7, 9, 6 ] ], // 3.07
+  [ [ 2, 11 ], [ 5, 7, 10 ], [ 3, 6, 8 ], [ 4, 9, 1 ] ], // 2.64
+  [ [ 3, 5 ], [ 2, 7, 4 ], [ 9, 10, 1 ], [ 8, 11, 6 ] ], // .8
+  [ [ 9, 8 ], [ 5, 6, 4 ], [ 3, 10, 2 ], [ 1, 11, 7 ] ], // 1
+[ [ 4, 3, 11 ], [ 8, 6, 10 ], [ 2, 9, 5 ], [ 1, 7 ] ]];
+// getBestGroup(namesTest, allPastGroupsTest, 100000);
 // console.log(parseGroups(namesTest));
+
+// const names = [];
+// export const allPastGroups = [[
+//   [
+//     'karencam@havenlife.com',
+//     'alex@havenlife.com',
+//     'ari@havenlife.com',
+//     'franklin@havenlife.com'
+//   ],
+//   [
+//     'yisheng.tang@havenlife.com',
+//     'lester@havenlife.com',
+//     'kamran@havenlife.com',
+//     'wei@havenlife.com'
+//   ],
+//   [
+//     'karenhan@havenlife.com',
+//     'richard@havenlife.com',
+//     'eli@havenlife.com',
+//     'gabesch@havenlife.com'
+//   ],
+//   [
+//     'tova@havenlife.com',
+//     'zack@havenlife.com',
+//     'igor@havenlife.com',
+//     'nsedlacek@havenlife.com'
+//   ],
+//   [
+//     'morellana@havenlife.com',
+//     'brittanylee@havenlife.com',
+//     'michael@havenlife.com',
+//     'nicolepark@havenlife.com'
+//   ],
+//   [
+//     'mark@havenlife.com',
+//     'brian@havenlife.com',
+//     'hannah.farnham@havenlife.com',
+//     'brianleu@havenlife.com'
+//   ],
+//   [
+//     'aneesha@havenlife.com',
+//     'ewellk@havenlife.com',
+//     'tisha@havenlife.com',
+//     'kathryn@havenlife.com'
+//   ],
+//   [
+//     'sushal@havenlife.com',
+//     'jacob@havenlife.com',
+//     'kateguzik@havenlife.com',
+//     'gabe@havenlife.com'
+//   ],
+//   [
+//     'shanks@havenlife.com',
+//     'nickeaket@havenlife.com',
+//     'adamhamot@havenlife.com',
+//     'laura@havenlife.com'
+//   ],
+//   [
+//     'james@havenlife.com',
+//     'ashley@havenlife.com',
+//     'roberto@havenlife.com',
+//     'ppennelli@havenlife.com'
+//   ],
+//   [
+//     'matteo@havenlife.com',
+//     'hannahmctigue@havenlife.com',
+//     'sambrandt@havenlife.com',
+//     'anja@havenlife.com'
+//   ],
+//   [
+//     'reeve@havenlife.com',
+//     'khuyen@havenlife.com',
+//     'sara@havenlife.com',
+//     'elle@havenlife.com'
+//   ],
+//   [
+//     'steve@havenlife.com',
+//     'sararadin@havenlife.com',
+//     'nathan@havenlife.com',
+//     'rashmi@havenlife.com'
+//   ]]];
+

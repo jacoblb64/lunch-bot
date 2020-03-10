@@ -82,6 +82,10 @@ const createMessage = (group) => {
   return start + names + otherNewBase;
 };
 
+const askOpt = (name) => {
+  return 'For this week, opt in or opt out ' + name;
+}
+
 export const addUsers = (channel, users) => {
   const slack = new WebClient(process.env.slackToken);
 
@@ -148,6 +152,29 @@ export const initChannels = (groups, userMap) => {
     //   return obj;
     // }).then(obj => {
     //   postToSlack(obj.channel, "Sorry, I can't make it :(");
+    });
+  });
+}
+
+export const requestOpt = (names, userMap) => {
+  names.forEach(name => {
+    let user = getUserIDsFromEmails(userMap, [name]);
+    let displayName = getDisplayNamesFromEmails(userMap, [name]);
+
+    let create = new Promise((resolve) => {
+      resolve(createChannel(user));
+    });
+
+    create
+    .then(x => {
+      const channel = x.channel.id;
+      return {channel, user, displayName};
+    }).then(obj => {
+      addUsers(obj.channel, obj.user);
+      return obj;
+    }).then(obj => {
+      postToSlack(obj.channel, askOpt(obj.displayName));
+      return obj;
     });
   });
 }
