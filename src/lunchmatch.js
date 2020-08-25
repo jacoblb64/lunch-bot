@@ -12,7 +12,8 @@ retrieveUserMap()
   // console.log(userMap);
   retrieveOnlyOptInUsers()
   .then((slackEmails) => {
+    //console.log('All emails: ', slackEmails);
     initChannels(getBestGroup(slackEmails, allPastGroups, 1000), userMap);
-    // initChannels(parseGroups(testEmails), userMap);
+    //initChannels(parseGroups(testEmails), userMap);
   });
 });

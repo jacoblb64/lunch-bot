@@ -13,9 +13,10 @@ const shuffle = (array) => {
 
 export const parseGroups = (names) => {
     let groups = [];
-    const maxSize = 4;
+    const maxSize = 3;
 
     shuffle(names);
+    //console.log('shuffle names: ', names);
     for (let i = 0; i < names.length; i += maxSize) {
         let temp = names.slice(i, i + maxSize);
         groups.push(temp);
@@ -31,7 +32,10 @@ export const parseGroups = (names) => {
 // groups is the return of parseGroups (a list of lists of users), while allPastGroups is a list of [lists of groups], in order of recency (most recent group is first)
 export const assessGroup = (groups, allPastGroups) => {
   let accumScore, overlapsInGroup;
-  const scorePerGroup = allPastGroups.map(onePastGroups => {
+  if (!allPastGroups) {
+    return 100;
+  }
+  const scorePerGroup = allPastGroups && allPastGroups.map(onePastGroups => {
     accumScore = 0;
     groups.forEach(group => {
       onePastGroups.forEach(pastGroup => {
@@ -45,19 +49,19 @@ export const assessGroup = (groups, allPastGroups) => {
     return accumScore;
   });
   // iterate through allPastGroups and calculate score for each one
-  const totalScore = scorePerGroup.reduce((scoreSoFar, groupScore, groupIndex) => scoreSoFar + groupScore * Math.pow(.8, groupIndex), 0);
+  const totalScore = scorePerGroup && scorePerGroup.reduce((scoreSoFar, groupScore, groupIndex) => scoreSoFar + groupScore * Math.pow(.8, groupIndex), 0);
   return totalScore;
 }
 
 export const getBestGroup = (names, allPastGroups, iterations) => {
-  // console.log('All past groups:', allPastGroups);
+  //console.log('All past groups:', allPastGroups);
   let bestScore = Infinity;
   let bestGroups, tempGroups, tempScore;
   for (let i = 0; i < iterations; i++) {
     tempGroups = parseGroups(names);
-    // console.log('A matching:', tempGroups);
+    //console.log('A matching:', tempGroups);
     tempScore = assessGroup(tempGroups, allPastGroups);
-    // console.log('The score is:', tempScore);
+    //console.log('The score is:', tempScore);
     if (tempScore < bestScore) {
       bestGroups = tempGroups;
       bestScore = tempScore;

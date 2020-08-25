@@ -56,6 +56,7 @@ export const getDisplayNamesFromEmails = (users, group) => {
 
 export const postToSlack = (channel, msg) => {
   const slack = new WebClient(process.env.slackToken);
+  console.log(`Posting message to slack in ${channel} saying ${msg}`);
 
   if (!dryRun) {
     return slack.chat.postMessage({
@@ -117,7 +118,8 @@ export const createChannel = (users) => {
 };
 
 export const initChannels = (groups, userMap) => {
-  groups.forEach(group => {
+  console.log(groups);
+  groups && groups.forEach(group => {
     let users = getUserIDsFromEmails(userMap, group).join(',');
     let displayNames = getDisplayNamesFromEmails(userMap, group);
 
@@ -159,6 +161,7 @@ export const initChannels = (groups, userMap) => {
 export const requestOpt = (names, userMap) => {
   names.forEach(name => {
     let user = getUserIDsFromEmails(userMap, [name]);
+    console.log('getting user from emails: '+ user);
     let displayName = getDisplayNamesFromEmails(userMap, [name]);
 
     let create = new Promise((resolve) => {

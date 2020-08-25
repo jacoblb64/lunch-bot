@@ -49,7 +49,7 @@ export function getUsers(auth) {
       console.log('Getting opted in users');
       sheets.spreadsheets.values.get({
         spreadsheetId: process.env.sheetID,
-        range: 'Form Responses 1!D2:D500',
+        range: 'Form Responses 1!A3:A1000',
       }, (err, res) => {
         if (err) return console.log('The API returned an error: ' + err);
         const rows = res.data.values;
@@ -72,27 +72,31 @@ export function getUsers(auth) {
 
     const optOutPromise = new Promise((resolve, reject) => {
       console.log('Getting opted out users');
-      sheets.spreadsheets.values.get({
-        spreadsheetId: process.env.sheetID,
-        range: 'Form Responses 2!B2:B500',
-      }, (err, res) => {
-        if (err) return console.log('The API returned an error: ' + err);
-        const rows = res.data.values;
-        let userList = [];
-        if (rows.length) {
-          // console.log('Name:');
-          // emails are in column D
-          fs.writeFileSync('optOutUsers.txt', '');
-          rows.map((row) => {
-            // console.log(`${row[0]}`);
-            fs.appendFileSync('optOutUsers.txt', row + '\n');
-            userList.push(row[0]);
-          });
-        } else {
-          console.log('No data found.');
-        }
-        resolve(userList);
-      });
+      
+      // for not commenting the optout list and letting the opt in list 
+      // do the work of both opt in an out
+      resolve([]);
+      // sheets.spreadsheets.values.get({
+      //   spreadsheetId: process.env.sheetID,
+      //   range: 'Form Responses 2!B2:B500',
+      // }, (err, res) => {
+      //   if (err) return console.log('The API returned an error: ' + err);
+      //   const rows = res.data.values;
+      //   let userList = [];
+      //   if (rows.length) {
+      //     // console.log('Name:');
+      //     // emails are in column D
+      //     fs.writeFileSync('optOutUsers.txt', '');
+      //     rows.map((row) => {
+      //       // console.log(`${row[0]}`);
+      //       fs.appendFileSync('optOutUsers.txt', row + '\n');
+      //       userList.push(row[0]);
+      //     });
+      //   } else {
+      //     console.log('No data found.');
+      //   }
+      //   resolve(userList);
+      // });
     });
 
     resolve(Promise.all([optInPromise, optOutPromise]));
@@ -110,8 +114,7 @@ export const retrieveOnlyOptInUsers = () => new Promise((resolve, reject) => {
   .then((result) => {
     let inSet = new Set(result[0]);
     let outSet = new Set(result[1]);
-
-    let diff = new Set([...inSet].filter(x => !outSet.has(x)));
+    let diff = new Set([...inSet].filter(x => x && !outSet.has(x)));
 
     resolve([...diff]);
   });
