@@ -72,15 +72,23 @@ export const postToSlack = (channel, msg) => {
 
 const createMessage = (group) => {
   console.log(group);
-  const start = "It’s time to plan your Lunch Match! The group is "; 
+  const start = "It’s time to plan your Haven Hangs meetup! The group is "; 
   const names = group.join(', ');
-  const base = ". \nSome things to consider: \n- Set up a time \n- Decide what to eat \n- Check if anyone has dietary restrictions \n- In the office or out of the office?";
-  const feedback = "\n\nPlease let us know what you think! http://bit.ly/LunchMatchFeedback";
-  const unsub = "\n\nIf you want to unsubscribe from future weeks, please fill out: http://bit.ly/LunchMatchUnsubscribe";
-  const newBase = ". \n PLEASE REACT WITH :thumbsup: or :thumbsdown:\n Which day can you get together for lunch?\n\n";
-  const otherNewBase = ".\nVOTE HERE BY REACTING TO WHICH DAYS WORK BEST FOR YOU! (:one: for Monday, :two: for Tuesday, etc.). Then arrange to make it happen.";
+  const hangsPrompt = ".\nTo kick-off the conversation, use the following prompt, with each person sharing!\n";
+  const randomPrompts = ["What is one thing that you’ve learned over the last six months? ", 
+  "Do have a new hobby that you’ve developed over the last year? If so, what is it, and how did you learn it? Are there any new hobbies that you’d like to learn and haven’t yet?",
+  "Fall is fast approaching! What are some of your favorite fall memories from childhood? Are there any fall activities that you are looking forward to?",
+  "Halloween is just around the corner. If you celebrated as a child, what was your favorite costume? What has been your favorite costume as an adult? ",
+  "What is something that you were once afraid of, but no longer are? How did you get over that fear?",
+  "If you could open a restaurant, what would you serve? Is there a specific dish you would make sure is on the menu?"
+  ];
+  // const base = ". \nSome things to consider: \n- Set up a time \n- Decide what to eat \n- Check if anyone has dietary restrictions \n- In the office or out of the office?";
+  // const feedback = "\n\nPlease let us know what you think! http://bit.ly/LunchMatchFeedback";
+  // const unsub = "\n\nIf you want to unsubscribe from future weeks, please fill out: http://bit.ly/LunchMatchUnsubscribe";
+  // const newBase = ". \n PLEASE REACT WITH :thumbsup: or :thumbsdown:\n Which day can you get together for lunch?\n\n";
+  // const otherNewBase = ".\nVOTE HERE BY REACTING TO WHICH DAYS WORK BEST FOR YOU! (:one: for Monday, :two: for Tuesday, etc.). Then arrange to make it happen.";
   // return start + names + base + feedback + unsub;
-  return start + names + otherNewBase;
+  return start + names + hangsPrompt + randomPrompts[Math.floor(Math.random() * randomPrompts.length)];
 };
 
 const askOpt = (name) => {
